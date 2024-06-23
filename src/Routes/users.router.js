@@ -62,8 +62,18 @@ router.patch("/:id", (req, res) => {
   res.send("updating a users");
 });
 
-router.delete("/:id", (req, res) => {
-  res.send("deleting all users");
+router.delete("/:id", async (req, res) => {
+  const id = req.params.id;
+  try {
+    const deleteOperation = await pool.query(" DELETE FROM users where id=$1", [id])
+    if(deleteOperation.rowCount === 1){
+        res.status(200).json({ success: true, message: "User deleted successfully" })
+    } else {
+        res.status(400).json({ success: false, message: "Invalid user" })
+    }
+  } catch (error) {
+    res.status(500).json({success: false, message: error.message })
+  }
 });
 
 export default router;
