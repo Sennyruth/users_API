@@ -2,6 +2,8 @@ import express from 'express'
 const app = express();
 import userRouter from "./Routes/users.router.js"
 
+app.use(express.json());
+
 app.use("/users", userRouter)
 
 app.listen(3004, ()=>{
